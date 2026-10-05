@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jungle Escape - Should vs Has To</title>
+    <!-- Tailwind CSS for modern responsive UI styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome icons for rich visual UI elements -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Fredoka, Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Outfit:wght@400;600;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        jungle: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            300: '#86efac',
+                            500: '#22c55e',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                            950: '#052e16',
+                        },
+                        amberGold: '#f59e0b',
+                        wood: {
+                            400: '#d97706',
+                            600: '#92400e',
+                            800: '#78350f',
+                            900: '#451a03',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        game: ['Fredoka', 'cursive'],
+                        title: ['Outfit', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at center, #0f381e 0%, #06190e 100%);
+            color: #ecfdf5;
+            user-select: none;
+        }
+
+        .game-font {
+            font-family: 'Fredoka', cursive;
+        }
+
+        /* Wood and Parchment Texture Card Styles */
+        .jungle-card {
+            background: linear-gradient(135deg, rgba(20, 56, 33, 0.92) 0%, rgba(10, 35, 20, 0.96) 100%);
+            backdrop-filter: blur(12px);
+            border: 3px solid #f59e0b;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(245, 158, 11, 0.15);
+        }
+
+        .bamboo-header {
+            background: linear-gradient(180deg, #92400e 0%, #78350f 100%);
+            border-bottom: 4px solid #f59e0b;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .game-title-text {
+            background: linear-gradient(180deg, #fef08a 0%, #f59e0b 50%, #d97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0px 3px 0px #451a03;
+            filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.8));
+        }
+
+        .wood-btn {
+            background: linear-gradient(180deg, #10b981 0%, #047857 100%);
+            border: 2px solid #6ee7b7;
+            box-shadow: 0 6px 0px #064e3b, 0 10px 15px rgba(0, 0, 0, 0.4);
+            transition: all 0.15s ease-in-out;
+        }
+
+        .wood-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0px #064e3b, 0 14px 20px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(180deg, #34d399 0%, #059669 100%);
+        }
+
+        .wood-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0px #064e3b, 0 5px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.4)); }
+            50% { filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.8)); }
+        }
+
+        .glow-title {
+            animation: pulseGlow 3s infinite;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between overflow-x-hidden bg-gradient-to-b from-gray-950 via-jungle-950 to-black text-gray-100">
+
+    <header class="w-full bamboo-header py-3 px-4 md:px-8 flex justify-between items-center sticky top-0 z-40">
+        <div class="flex items-center space-x-3">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center shadow-lg border-2 border-amber-200 text-amber-950 text-2xl">
+                <i class="fa-solid fa-compass"></i>
+            </div>
+            <div>
+                <h1 class="font-black text-xl md:text-2xl game-title-text tracking-wide game-font glow-title">JUNGLE ESCAPE</h1>
+                <p class="text-[11px] text-amber-200/90 font-semibold tracking-wide">Modals Practice: <span class="text-white">Should vs. Has To</span></p>
+            </div>
+        </div>
+
+        <!-- Progress tracker pill -->
+        <div id="headerProgress" class="hidden flex items-center space-x-3 bg-wood-900/90 px-4 py-1.5 rounded-full border-2 border-amber-500/80 shadow-lg">
+            <span class="text-[11px] uppercase font-extrabold text-amber-300 tracking-wider">Scenario</span>
+            <span id="currentStageBadge" class="bg-amber-400 text-amber-950 font-black px-2.5 py-0.5 rounded-full text-sm font-mono">1 / 9</span>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-6 max-w-4xl flex flex-col justify-center items-center">
+
+        <!-- ==================== START SCREEN ==================== -->
+        <section id="startScreen" class="w-full jungle-card rounded-3xl p-6 md:p-10 text-center space-y-6 max-w-2xl">
+            <div class="relative inline-block">
+                <div class="w-28 h-28 mx-auto rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-900 border-4 border-amber-400 flex items-center justify-center text-amber-300 text-6xl shadow-2xl transform rotate-3 hover:rotate-0 transition duration-300">
+                    <i class="fa-solid fa-person-running"></i>
+                </div>
+                <span class="absolute -bottom-2 -right-2 bg-amber-400 text-amber-950 text-xs font-black px-3 py-1 rounded-full border-2 border-amber-900 shadow-md">
+                    5/9 required to win
+                </span>
+            </div>
+
+            <div class="space-y-1">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-amber-300 game-font tracking-wide">
+                    Escape from the Jungle!
+                </h2>
+                <p class="text-xs md:text-sm text-emerald-200 font-medium italic">
+                    ¡Escapa de la jungla tomando las decisiones gramaticales correctas!
+                </p>
+            </div>
+
+            <!-- Rules Parchment Box -->
+            <div class="bg-wood-900/70 rounded-2xl p-4 md:p-6 text-left text-sm space-y-3 border-2 border-amber-600/60 shadow-inner">
+                <h3 class="font-black text-amber-400 flex items-center gap-2 text-base game-font">
+                    <i class="fa-solid fa-scroll text-amber-300"></i> Instructions / Instrucciones:
+                </h3>
+                <ul class="space-y-2.5 text-gray-100 text-xs md:text-sm">
+                    <li class="flex items-start gap-2">
+                        <i class="fa-solid fa-chevron-right text-amber-400 mt-1 text-xs"></i>
+                        <span>Complete <strong>9 scenarios</strong> using <strong>"should"</strong> (advice/suggestion) or <strong>"has to"</strong> (rule/obligation).</span>
+                    </li>
+                    <li class="flex items-start gap-2 text-amber-200/70 text-[11px] md:text-xs pl-5 -mt-1 italic">
+                        <span>(Enfrentarás 9 escenarios en la jungla. Elige "should" para consejos o "has to" para obligaciones).</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i class="fa-solid fa-chevron-right text-amber-400 mt-1 text-xs"></i>
+                        <span>Answers will remain hidden until you complete all 9 levels!</span>
+                    </li>
+                    <li class="flex items-start gap-2 text-amber-200/70 text-[11px] md:text-xs pl-5 -mt-1 italic">
+                        <span>(Las respuestas permanecerán ocultas hasta completar todos los niveles).</span>
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <i class="fa-solid fa-trophy text-amber-400 mt-1 text-xs"></i>
+                        <span>Score at least <strong>5 out of 9 correct</strong> to escape safely!</span>
+                    </li>
+                    <li class="flex items-start gap-2 text-amber-200/70 text-[11px] md:text-xs pl-5 -mt-1 italic">
+                        <span>(Consigue al menos 5 respuestas correctas para lograr escapar).</span>
+                    </li>
+                </ul>
+            </div>
+
+            <button id="btnStart" onclick="startGame()" class="wood-btn w-full md:w-3/4 py-4 px-8 rounded-2xl text-amber-100 font-extrabold text-xl game-font tracking-wider flex items-center justify-center gap-3">
+                <span>START ADVENTURE</span>
+                <i class="fa-solid fa-play text-amber-300"></i>
+            </button>
+            <p class="text-[11px] text-emerald-300/80 italic font-semibold">¡Haz clic para comenzar la aventura!</p>
+        </section>
+
+        <!-- ==================== GAMEPLAY SECTION ==================== -->
+        <section id="gameplayScreen" class="hidden w-full flex flex-col gap-5 max-w-3xl">
+            
+            <!-- Animated Canvas Container -->
+            <div class="relative w-full aspect-video md:aspect-[21/9] bg-black rounded-3xl overflow-hidden border-4 border-amber-500 shadow-2xl">
+                <!-- HTML5 Canvas for Animated Environment -->
+                <canvas id="jungleCanvas" class="w-full h-full block"></canvas>
+                
+                <!-- HUD Canvas Overlay elements -->
+                <div class="absolute top-3 left-3 bg-wood-900/85 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-amber-500/60 flex items-center gap-2 shadow-lg">
+                    <i class="fa-solid fa-location-dot text-amber-400 text-xs"></i>
+                    <span id="canvasLocationTag" class="text-xs font-bold text-amber-100">Entering Jungle</span>
+                </div>
+
+                <button onclick="toggleAudio()" id="audioToggleBtn" class="absolute top-3 right-3 bg-wood-900/85 hover:bg-wood-800 backdrop-blur-md text-white px-3 py-1.5 rounded-xl border border-amber-500/60 transition text-xs flex items-center gap-2 shadow-lg">
+                    <i id="audioIcon" class="fa-solid fa-volume-high text-amber-400"></i>
+                    <span class="hidden md:inline text-[11px] font-bold text-amber-100" id="audioLabel">Sound ON</span>
+                </button>
+            </div>
+
+            <!-- Question Card -->
+            <div class="jungle-card rounded-3xl p-5 md:p-7 space-y-5">
+                
+                <!-- Scenario Context Header -->
+                <div class="space-y-1 border-b border-amber-600/30 pb-3">
+                    <div class="flex items-center gap-2">
+                        <span id="scenarioNumber" class="text-xs font-black bg-amber-500 text-amber-950 px-2.5 py-0.5 rounded-md uppercase font-mono">Scenario 1</span>
+                        <h2 id="scenarioTitleEn" class="text-lg md:text-xl font-extrabold text-amber-300">On entering the jungle</h2>
+                    </div>
+                    <!-- Spanish context in smaller italic font -->
+                    <p id="scenarioContextEs" class="text-xs md:text-sm text-emerald-200/90 italic font-normal">
+                        Al entrar a la jungla, hay un letrero que dice "No fumar".
+                    </p>
+                </div>
+
+                <!-- Sentence Display Box -->
+                <div class="bg-wood-950/80 border-2 border-amber-600/50 rounded-2xl p-5 md:p-6 text-center space-y-3 shadow-inner">
+                    <p id="sentenceDisplayEn" class="text-base md:text-xl font-bold text-white leading-relaxed">
+                        <!-- Dynamic English sentence -->
+                    </p>
+                    
+                    <!-- Spanish translation in smaller text -->
+                    <p id="sentenceDisplayEs" class="text-xs md:text-sm text-amber-200/70 italic">
+                        <!-- Dynamic Spanish sentence -->
+                    </p>
+                </div>
+
+                <!-- Answer Selection Grid -->
+                <div class="space-y-2">
+                    <p class="text-[11px] md:text-xs font-bold text-amber-400 uppercase tracking-wider text-center">Select your choice / Selecciona tu respuesta:</p>
+                    <div class="grid grid-cols-2 gap-4 pt-1">
+                        <button id="optHasTo" onclick="selectAnswer('has to')" class="option-btn py-4 px-6 rounded-2xl border-2 border-amber-600/70 bg-wood-900/80 hover:bg-amber-600/30 hover:border-amber-400 text-white font-extrabold text-lg transition duration-200 flex flex-col items-center justify-center gap-1 shadow-lg active:scale-95">
+                            <span class="game-font tracking-wide text-xl">has to</span>
+                        </button>
+
+                        <button id="optShould" onclick="selectAnswer('should')" class="option-btn py-4 px-6 rounded-2xl border-2 border-amber-600/70 bg-wood-900/80 hover:bg-amber-600/30 hover:border-amber-400 text-white font-extrabold text-lg transition duration-200 flex flex-col items-center justify-center gap-1 shadow-lg active:scale-95">
+                            <span class="game-font tracking-wide text-xl">should</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Navigation Bar -->
+                <div class="flex justify-between items-center pt-2">
+                    <button id="btnPrev" onclick="prevScenario()" class="px-4 py-2.5 bg-wood-900/90 hover:bg-wood-800 text-amber-200 text-xs font-bold rounded-xl border border-amber-600/60 transition flex items-center gap-2 opacity-50 cursor-not-allowed" disabled>
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Previous</span>
+                    </button>
+
+                    <button id="btnNext" onclick="nextScenario()" class="px-6 py-3 wood-btn text-amber-100 text-sm font-black rounded-xl shadow-lg transition flex items-center gap-2 game-font opacity-50 cursor-not-allowed" disabled>
+                        <span id="nextBtnText">NEXT SCENARIO</span>
+                        <i id="nextBtnIcon" class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ==================== RESULTS SCREEN ==================== -->
+        <section id="resultsScreen" class="hidden w-full jungle-card rounded-3xl p-6 md:p-8 space-y-8 max-w-3xl">
+            
+            <!-- Result Banner -->
+            <div id="resultHeader" class="text-center space-y-3 p-6 rounded-2xl bg-gradient-to-b from-wood-900 to-wood-950 border-3 border-amber-400 shadow-2xl">
+                <div id="resultBadgeIcon" class="w-20 h-20 mx-auto rounded-full bg-amber-400 text-amber-950 flex items-center justify-center text-4xl shadow-xl">
+                    <i class="fa-solid fa-flag-checkered"></i>
+                </div>
+                <h2 id="resultTitle" class="text-2xl md:text-4xl font-black text-amber-300 game-font">
+                    YOU ESCAPED THE JUNGLE!
+                </h2>
+                <p id="resultTitleEs" class="text-xs md:text-sm text-amber-100/90 italic font-medium">
+                    ¡Lograste escapar de la jungla exitosamente!
+                </p>
+                <div class="inline-block bg-black/60 px-6 py-2 rounded-full border border-amber-400/40 mt-2">
+                    <span class="text-xs text-gray-300">Score / Puntuación: </span>
+                    <span id="finalScoreText" class="text-xl font-black text-amber-400 font-mono">7 / 9</span>
+                </div>
+            </div>
+
+            <!-- Feedback List -->
+            <div class="space-y-4">
+                <div class="flex justify-between items-end border-b border-amber-600/40 pb-2">
+                    <h3 class="text-lg font-bold text-amber-400 flex items-center gap-2 game-font">
+                        <i class="fa-solid fa-square-poll-vertical"></i> Performance Review & Answers
+                    </h3>
+                    <span class="text-[11px] text-amber-200/70 italic">(Revisión de Respuestas)</span>
+                </div>
+
+                <div id="feedbackContainer" class="space-y-4 max-h-[420px] overflow-y-auto pr-1 no-scrollbar">
+                    <!-- Dynamic review items injected here -->
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 pt-2">
+                <button onclick="resetGame()" class="wood-btn flex-1 text-amber-100 font-bold py-3.5 px-6 rounded-2xl shadow-lg transition flex items-center justify-center gap-2 game-font text-base">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    <span>PLAY AGAIN / REPETIR</span>
+                </button>
+                <button onclick="copySummary()" class="flex-1 bg-wood-900 hover:bg-wood-800 border-2 border-amber-500/70 text-amber-200 font-bold py-3.5 px-6 rounded-2xl transition flex items-center justify-center gap-2 game-font text-sm">
+                    <i class="fa-solid fa-copy"></i>
+                    <span id="copyBtnText">COPY RESULTS FOR TEACHER</span>
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer with Requested Credits -->
+    <footer class="py-5 text-center text-xs text-amber-200/80 border-t border-amber-800/50 bg-black/70 backdrop-blur-md">
+        <p class="font-bold text-amber-400">Jungle Escape • Modal Verbs Game ("Should" vs "Has To")</p>
+        <p class="text-[11px] text-gray-300 mt-1 font-semibold">Made by Cristian Vargas Díaz for Prepa 11 - Generación 2026D</p>
+    </footer>
+
+    <script>
+        /* SCENARIOS DATA DEFINITIONS */
+        const scenarios = [
+            {
+                id: 1,
+                titleEn: "On entering the jungle",
+                contextEs: "Al entrar a la jungla, hay un letrero que dice 'No fumar'.",
+                sentenceBefore: "He has a cigarette, so he ",
+                sentenceAfter: " put it out.",
+                sentenceEs: "Él tiene un cigarrillo, así que ______ apagarlo.",
+                correct: "has to",
+                explanationEn: "It is an official rule/prohibition ('Smoke not allowed'), making it mandatory (obligation = has to).",
+                explanationEs: "Es una regla/prohibición oficial ('No fumar'), por lo tanto es obligatorio (has to).",
+                sceneType: "sign_smoke"
+            },
+            {
+                id: 2,
+                titleEn: "Encounters a lake",
+                contextEs: "Se encuentra con un lago tranquilo.",
+                sentenceBefore: "He ",
+                sentenceAfter: " swim to get to the other end. Or maybe change direction.",
+                sentenceEs: "Él ______ nadar para llegar al otro extremo. O tal vez cambiar de dirección.",
+                correct: "should",
+                explanationEn: "It is a recommendation/option among alternatives, not a strict rule (advice = should).",
+                explanationEs: "Es una opción o recomendación personal entre varias, no una regla estricta (should).",
+                sceneType: "lake_quiet"
+            },
+            {
+                id: 3,
+                titleEn: "Lake full of crocodiles",
+                contextEs: "Se encuentra con otro lago, lleno de cocodrilos y una liana colgando de un árbol.",
+                sentenceBefore: "He ",
+                sentenceAfter: " take the vine to move, instead of swimming.",
+                sentenceEs: "Él ______ tomar la liana para moverse, en lugar de nadar.",
+                correct: "has to",
+                explanationEn: "Swimming with crocodiles is fatal. Using the vine is an absolute necessity (obligation = has to).",
+                explanationEs: "Nadar con cocodrilos es letal. Usar la liana es la única opción de supervivencia (has to).",
+                sceneType: "lake_crocs"
+            },
+            {
+                id: 4,
+                titleEn: "Gunshots in the distance",
+                contextEs: "Está a salvo en el suelo, pero de repente escucha disparos.",
+                sentenceBefore: "He ",
+                sentenceAfter: " take cover. There's no other option!",
+                sentenceEs: "Él ______ cubrirse. ¡No hay otra opción!",
+                correct: "has to",
+                explanationEn: "'There's no other option!' indicates total mandatory action for survival (obligation = has to).",
+                explanationEs: "'¡No hay otra opción!' indica una acción obligatoria de supervivencia (has to).",
+                sceneType: "gunshots"
+            },
+            {
+                id: 5,
+                titleEn: "Native tribe with spears",
+                contextEs: "Se encuentra con una tribu con lanzas. No lo dejarán pasar a menos que les dé comida.",
+                sentenceBefore: "He ",
+                sentenceAfter: " give them his lunch.",
+                sentenceEs: "Él ______ darles su almuerzo.",
+                correct: "has to",
+                explanationEn: "They will not let him pass without food. It is a mandatory condition (obligation = has to).",
+                explanationEs: "No lo dejarán pasar sin comida. Es una condición obligatoria (has to).",
+                sceneType: "tribe"
+            },
+            {
+                id: 6,
+                titleEn: "A map on the floor",
+                contextEs: "Sorprendentemente, hay un mapa en el suelo.",
+                sentenceBefore: "He ",
+                sentenceAfter: " take it with him, just in case it is useful.",
+                sentenceEs: "Él ______ llevarlo consigo, por si acaso es útil.",
+                correct: "should",
+                explanationEn: "Taking the map is wise advice for the journey, but not mandatory (recommendation = should).",
+                explanationEs: "Llevar el mapa es una buena sugerencia para el viaje, no una obligación (should).",
+                sceneType: "map"
+            },
+            {
+                id: 7,
+                titleEn: "Heavy backpack",
+                contextEs: "¡Su mochila pesa demasiado!",
+                sentenceBefore: "He ",
+                sentenceAfter: " drop a heavy set of books that he's carrying, to lighten the weight.",
+                sentenceEs: "Él ______ tirar un juego pesado de libros que lleva, para aligerar el peso.",
+                correct: "should",
+                explanationEn: "Lightening the load is helpful advice to stay fast, not a law (recommendation = should).",
+                explanationEs: "Aligerar peso es una recomendación útil para ir más rápido, no una regla (should).",
+                sceneType: "heavy_backpack"
+            },
+            {
+                id: 8,
+                titleEn: "Hears a car sound",
+                contextEs: "Escucha el sonido de un automóvil. Está demasiado cansado y no puede correr.",
+                sentenceBefore: "He ",
+                sentenceAfter: " scream and ask for help, because he's too tired and can't run.",
+                sentenceEs: "Él ______ gritar y pedir ayuda, porque está demasiado cansado y no puede correr.",
+                correct: "has to",
+                explanationEn: "He cannot run, so calling out is his only remaining option (obligation = has to).",
+                explanationEs: "No puede correr, por lo que gritar es su única alternativa (has to).",
+                sceneType: "car_sound"
+            },
+            {
+                id: 9,
+                titleEn: "Final Escape!",
+                contextEs: "¡Finalmente escapó de la jungla!",
+                sentenceBefore: "He ",
+                sentenceAfter: " be more careful next time. But he loves adventure!",
+                sentenceEs: "Él ______ tener más cuidado la próxima vez. ¡Pero le encanta la aventura!",
+                correct: "should",
+                explanationEn: "Self-reflection and advice for future adventures (recommendation = should).",
+                explanationEs: "Reflexión o consejo para futuras aventuras (should).",
+                sceneType: "escaped"
+            }
+        ];
+
+        /* GAME STATE VARIABLES */
+        let currentIdx = 0;
+        let userAnswers = new Array(scenarios.length).fill(null);
+        let audioMuted = false;
+        let audioCtx = null;
+        let canvas, ctx;
+        let animationFrameId = null;
+        let animTime = 0;
+
+        // Audio Effects Generator (Web Audio API)
+        function playSound(type) {
+            if (audioMuted) return;
+            try {
+                if (!audioCtx) {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+
+                if (type === 'select') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.exponentialRampToValueAtTime(1046.50, now + 0.08);
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+                    osc.start(now);
+                    osc.stop(now + 0.08);
+                } else if (type === 'next') {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(350, now);
+                    osc.frequency.exponentialRampToValueAtTime(700, now + 0.12);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+                    osc.start(now);
+                    osc.stop(now + 0.12);
+                } else if (type === 'win') {
+                    const notes = [523.25, 659.25, 783.99, 1046.50];
+                    notes.forEach((freq, i) => {
+                        const subOsc = audioCtx.createOscillator();
+                        const subGain = audioCtx.createGain();
+                        subOsc.connect(subGain);
+                        subGain.connect(audioCtx.destination);
+                        subOsc.type = 'triangle';
+                        subOsc.frequency.setValueAtTime(freq, now + i * 0.1);
+                        subGain.gain.setValueAtTime(0.2, now + i * 0.1);
+                        subGain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.1 + 0.3);
+                        subOsc.start(now + i * 0.1);
+                        subOsc.stop(now + i * 0.1 + 0.3);
+                    });
+                } else if (type === 'fail') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(250, now);
+                    osc.frequency.exponentialRampToValueAtTime(110, now + 0.35);
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                }
+            } catch (e) {
+                console.log("Audio not allowed yet", e);
+            }
+        }
+
+        function toggleAudio() {
+            audioMuted = !audioMuted;
+            const icon = document.getElementById('audioIcon');
+            const label = document.getElementById('audioLabel');
+            if (audioMuted) {
+                icon.className = 'fa-solid fa-volume-xmark text-red-400';
+                label.innerText = 'Sound OFF';
+            } else {
+                icon.className = 'fa-solid fa-volume-high text-amber-400';
+                label.innerText = 'Sound ON';
+                playSound('select');
+            }
+        }
+
+        function startGame() {
+            playSound('next');
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('gameplayScreen').classList.remove('hidden');
+            document.getElementById('headerProgress').classList.remove('hidden');
+
+            initCanvas();
+            loadScenario(0);
+        }
+
+        function loadScenario(index) {
+            currentIdx = index;
+            const data = scenarios[index];
+
+            document.getElementById('currentStageBadge').innerText = `${index + 1} / ${scenarios.length}`;
+            document.getElementById('scenarioNumber').innerText = `Scenario ${index + 1}`;
+            document.getElementById('canvasLocationTag').innerText = data.titleEn;
+
+            document.getElementById('scenarioTitleEn').innerText = data.titleEn;
+            document.getElementById('scenarioContextEs').innerText = data.contextEs;
+
+            renderSentenceText(data);
+            updateOptionButtons();
+
+            const prevBtn = document.getElementById('btnPrev');
+            const nextBtn = document.getElementById('btnNext');
+
+            if (index === 0) {
+                prevBtn.disabled = true;
+                prevBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                prevBtn.disabled = false;
+                prevBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+
+            const hasChosen = userAnswers[index] !== null;
+            if (hasChosen) {
+                nextBtn.disabled = false;
+                nextBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                nextBtn.disabled = true;
+                nextBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+
+            if (index === scenarios.length - 1) {
+                document.getElementById('nextBtnText').innerText = 'FINISH & ESCAPE';
+                document.getElementById('nextBtnIcon').className = 'fa-solid fa-flag-checkered';
+            } else {
+                document.getElementById('nextBtnText').innerText = 'NEXT SCENARIO';
+                document.getElementById('nextBtnIcon').className = 'fa-solid fa-arrow-right';
+            }
+        }
+
+        function renderSentenceText(data) {
+            const chosen = userAnswers[currentIdx];
+            const blankText = chosen ? `<span class="px-3.5 py-1 mx-1 bg-amber-400 text-amber-950 rounded-lg font-black game-font text-xl shadow-md">${chosen}</span>` 
+                                    : `<span class="px-5 py-1 mx-1 bg-wood-900 border-2 border-dashed border-amber-400/80 text-amber-300 rounded-lg font-bold">______</span>`;
+
+            document.getElementById('sentenceDisplayEn').innerHTML = `"${data.sentenceBefore}${blankText}${data.sentenceAfter}"`;
+            document.getElementById('sentenceDisplayEs').innerText = `(${data.sentenceEs})`;
+        }
+
+        function selectAnswer(val) {
+            playSound('select');
+            userAnswers[currentIdx] = val;
+
+            updateOptionButtons();
+            renderSentenceText(scenarios[currentIdx]);
+
+            const nextBtn = document.getElementById('btnNext');
+            nextBtn.disabled = false;
+            nextBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+
+        function updateOptionButtons() {
+            const chosen = userAnswers[currentIdx];
+            const btnHasTo = document.getElementById('optHasTo');
+            const btnShould = document.getElementById('optShould');
+
+            [btnHasTo, btnShould].forEach(b => {
+                b.className = "option-btn py-4 px-6 rounded-2xl border-2 border-amber-600/70 bg-wood-900/80 hover:bg-amber-600/30 hover:border-amber-400 text-white font-extrabold text-lg transition duration-200 flex flex-col items-center justify-center gap-1 shadow-lg active:scale-95";
+            });
+
+            if (chosen === 'has to') {
+                btnHasTo.className = "option-btn py-4 px-6 rounded-2xl border-3 border-amber-400 bg-amber-500/40 text-amber-200 font-black text-xl shadow-amber-900/50 shadow-2xl flex flex-col items-center justify-center gap-1 ring-2 ring-amber-400";
+            } else if (chosen === 'should') {
+                btnShould.className = "option-btn py-4 px-6 rounded-2xl border-3 border-amber-400 bg-amber-500/40 text-amber-200 font-black text-xl shadow-amber-900/50 shadow-2xl flex flex-col items-center justify-center gap-1 ring-2 ring-amber-400";
+            }
+        }
+
+        function prevScenario() {
+            if (currentIdx > 0) {
+                playSound('next');
+                loadScenario(currentIdx - 1);
+            }
+        }
+
+        function nextScenario() {
+            if (userAnswers[currentIdx] === null) return;
+
+            if (currentIdx < scenarios.length - 1) {
+                playSound('next');
+                loadScenario(currentIdx + 1);
+            } else {
+                finishGame();
+            }
+        }
+
+        function finishGame() {
+            let correctCount = 0;
+            userAnswers.forEach((ans, i) => {
+                if (ans === scenarios[i].correct) correctCount++;
+            });
+
+            const passed = correctCount >= 5;
+
+            if (passed) {
+                playSound('win');
+            } else {
+                playSound('fail');
+            }
+
+            document.getElementById('gameplayScreen').classList.add('hidden');
+            document.getElementById('headerProgress').classList.add('hidden');
+            document.getElementById('resultsScreen').classList.remove('hidden');
+
+            const resHeader = document.getElementById('resultHeader');
+            const resIcon = document.getElementById('resultBadgeIcon');
+            const resTitle = document.getElementById('resultTitle');
+            const resTitleEs = document.getElementById('resultTitleEs');
+            const finalScoreText = document.getElementById('finalScoreText');
+
+            finalScoreText.innerText = `${correctCount} / ${scenarios.length}`;
+
+            if (passed) {
+                resHeader.className = "text-center space-y-3 p-6 rounded-2xl bg-gradient-to-b from-emerald-950 to-wood-950 border-3 border-emerald-400 shadow-2xl";
+                resIcon.className = "w-20 h-20 mx-auto rounded-full bg-emerald-400 text-emerald-950 flex items-center justify-center text-4xl shadow-xl";
+                resIcon.innerHTML = `<i class="fa-solid fa-person-running"></i>`;
+                resTitle.innerText = "YOU ESCAPED THE JUNGLE!";
+                resTitle.className = "text-2xl md:text-4xl font-black text-emerald-300 game-font";
+                resTitleEs.innerText = "¡Lograste escapar de la jungla con éxito! Excelentes decisiones.";
+            } else {
+                resHeader.className = "text-center space-y-3 p-6 rounded-2xl bg-gradient-to-b from-red-950 to-wood-950 border-3 border-red-500 shadow-2xl";
+                resIcon.className = "w-20 h-20 mx-auto rounded-full bg-red-500 text-white flex items-center justify-center text-4xl shadow-xl";
+                resIcon.innerHTML = `<i class="fa-solid fa-skull-crossbones"></i>`;
+                resTitle.innerText = "YOU GOT LOST IN THE JUNGLE!";
+                resTitle.className = "text-2xl md:text-4xl font-black text-red-400 game-font";
+                resTitleEs.innerText = "Te quedaste atrapado en la jungla. Necesitabas al menos 5 respuestas correctas para salir.";
+            }
+
+            const container = document.getElementById('feedbackContainer');
+            container.innerHTML = '';
+
+            scenarios.forEach((sc, i) => {
+                const userChoice = userAnswers[i];
+                const isCorrect = userChoice === sc.correct;
+
+                const card = document.createElement('div');
+                card.className = `p-4 rounded-2xl border-2 ${isCorrect ? 'bg-wood-900/60 border-emerald-500/50' : 'bg-red-950/40 border-red-500/50'} space-y-2`;
+
+                card.innerHTML = `
+                    <div class="flex items-start justify-between gap-3">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-bold px-2.5 py-0.5 rounded-md ${isCorrect ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40' : 'bg-red-500/20 text-red-300 border border-red-500/40'}">
+                                #${i + 1}
+                            </span>
+                            <h4 class="font-bold text-sm text-amber-200">${sc.titleEn}</h4>
+                        </div>
+                        <span class="text-xs font-black px-3 py-1 rounded-full flex items-center gap-1.5 ${isCorrect ? 'bg-emerald-400 text-emerald-950' : 'bg-red-500 text-white'}">
+                            <i class="fa-solid ${isCorrect ? 'fa-check' : 'fa-xmark'}"></i>
+                            ${isCorrect ? 'CORRECT' : 'INCORRECT'}
+                        </span>
+                    </div>
+
+                    <div class="text-xs text-gray-200 space-y-1 bg-black/40 p-3 rounded-xl border border-amber-500/20">
+                        <p class="font-medium text-gray-100">
+                            <strong>Sentence:</strong> "${sc.sentenceBefore}<u class="font-bold underline decoration-amber-400 decoration-2">${sc.correct}</u>${sc.sentenceAfter}"
+                        </p>
+                        <p class="text-[11px] text-gray-400 italic">
+                            Tu respuesta: <span class="font-bold ${isCorrect ? 'text-emerald-400' : 'text-red-400'}">${userChoice}</span> | Correcta: <span class="font-bold text-amber-300">${sc.correct}</span>
+                        </p>
+                    </div>
+
+                    <div class="text-xs space-y-0.5 pt-1">
+                        <p class="font-bold text-amber-400 flex items-center gap-1">
+                            <i class="fa-solid fa-lightbulb text-amber-300"></i> Grammar Reason:
+                        </p>
+                        <p class="text-emerald-100/90">${sc.explanationEn}</p>
+                        <p class="text-[11px] text-amber-200/70 italic">${sc.explanationEs}</p>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function resetGame() {
+            playSound('next');
+            userAnswers = new Array(scenarios.length).fill(null);
+            currentIdx = 0;
+
+            document.getElementById('resultsScreen').classList.add('hidden');
+            document.getElementById('startScreen').classList.remove('hidden');
+        }
+
+        function copySummary() {
+            let correctCount = 0;
+            userAnswers.forEach((ans, i) => {
+                if (ans === scenarios[i].correct) correctCount++;
+            });
+
+            let summaryText = `Jungle Escape Game Results:\nScore: ${correctCount}/${scenarios.length}\n`;
+            summaryText += correctCount >= 5 ? "Status: ESCAPED!\n\n" : "Status: TRAPPED!\n\n";
+
+            userAnswers.forEach((ans, i) => {
+                summaryText += `${i+1}. ${scenarios[i].titleEn}: ${ans} (${ans === scenarios[i].correct ? 'OK' : 'X - Correct: ' + scenarios[i].correct})\n`;
+            });
+
+            summaryText += `\nMade by Cristian Vargas Díaz for Prepa 11 - Generación 2026D`;
+
+            const el = document.createElement('textarea');
+            el.value = summaryText;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+
+            const btnText = document.getElementById('copyBtnText');
+            btnText.innerText = "COPIED TO CLIPBOARD!";
+            setTimeout(() => {
+                btnText.innerText = "COPY RESULTS FOR TEACHER";
+            }, 2500);
+        }
+
+        function initCanvas() {
+            canvas = document.getElementById('jungleCanvas');
+            ctx = canvas.getContext('2d');
+            resizeCanvas();
+
+            window.addEventListener('resize', resizeCanvas);
+
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            renderLoop();
+        }
+
+        function resizeCanvas() {
+            if (!canvas) return;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+        }
+
+        function renderLoop() {
+            animTime += 0.035;
+            drawJungleScene();
+            animationFrameId = requestAnimationFrame(renderLoop);
+        }
+
+        function drawJungleScene() {
+            if (!ctx || !canvas) return;
+            const w = canvas.width;
+            const h = canvas.height;
+
+            ctx.clearRect(0, 0, w, h);
+
+            // 1. Vibrant Sky Background (Bright tropical feel inspired by image reference)
+            const skyGrad = ctx.createLinearGradient(0, 0, 0, h * 0.7);
+            skyGrad.addColorStop(0, '#38bdf8');
+            skyGrad.addColorStop(0.5, '#bae6fd');
+            skyGrad.addColorStop(1, '#86efac');
+            ctx.fillStyle = skyGrad;
+            ctx.fillRect(0, 0, w, h);
+
+            // 2. Animated Clouds
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+            for (let i = 0; i < 3; i++) {
+                const cloudX = ((animTime * 15 + i * 180) % (w + 120)) - 60;
+                const cloudY = 15 + i * 12;
+                ctx.beginPath();
+                ctx.arc(cloudX, cloudY, 18, 0, Math.PI * 2);
+                ctx.arc(cloudX + 18, cloudY - 6, 22, 0, Math.PI * 2);
+                ctx.arc(cloudX + 38, cloudY, 16, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // 3. Distant Mountains (Blue-grey peaks like reference image)
+            ctx.fillStyle = '#64748b';
+            ctx.beginPath();
+            ctx.moveTo(0, h * 0.55);
+            ctx.lineTo(w * 0.15, h * 0.25);
+            ctx.lineTo(w * 0.35, h * 0.55);
+            ctx.lineTo(w * 0.55, h * 0.22);
+            ctx.lineTo(w * 0.8, h * 0.55);
+            ctx.lineTo(w, h * 0.35);
+            ctx.lineTo(w, h * 0.55);
+            ctx.closePath();
+            ctx.fill();
+
+            // Mountain highlight accent
+            ctx.fillStyle = '#94a3b8';
+            ctx.beginPath();
+            ctx.moveTo(w * 0.15, h * 0.25);
+            ctx.lineTo(w * 0.22, h * 0.4);
+            ctx.lineTo(w * 0.35, h * 0.55);
+            ctx.closePath();
+            ctx.fill();
+
+            // 4. Middle-ground Jungle Trees Range
+            ctx.fillStyle = '#15803d';
+            for (let i = 0; i < 10; i++) {
+                const treeX = (w / 8) * i - 20;
+                ctx.beginPath();
+                ctx.arc(treeX, h * 0.52, w * 0.09, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Dirt Ground Path
+            ctx.fillStyle = '#d97706';
+            ctx.fillRect(0, h * 0.55, w, h * 0.45);
+
+            // Ground Vegetation Layer
+            ctx.fillStyle = '#22c55e';
+            ctx.fillRect(0, h * 0.78, w, h * 0.22);
+
+            // 5. Scenario Specific Artwork Overlay
+            const st = scenarios[currentIdx] ? scenarios[currentIdx].sceneType : 'default';
+
+            if (st === 'sign_smoke') {
+                drawWoodenSign(w * 0.7, h * 0.5, "NO SMOKING");
+                drawSmokePuffs(w * 0.73, h * 0.32);
+            } else if (st === 'lake_quiet') {
+                drawLake(w, h, false);
+            } else if (st === 'lake_crocs') {
+                drawLake(w, h, true);
+                drawHangingVine(w * 0.5, h);
+            } else if (st === 'gunshots') {
+                drawGunshotFlash(w, h);
+            } else if (st === 'tribe') {
+                drawNativeTribe(w, h);
+            } else if (st === 'map') {
+                drawGlowingMap(w * 0.6, h * 0.72);
+            } else if (st === 'heavy_backpack') {
+                drawBackpack(w * 0.58, h * 0.68);
+            } else if (st === 'car_sound') {
+                drawCarSoundwaves(w, h);
+            } else if (st === 'escaped') {
+                drawEscapeGate(w, h);
+            }
+
+            // 6. Character Drawing (Adventurer with Blue shirt & Brown pants matching picture)
+            drawAdventurer(w * 0.28, h * 0.62);
+
+            // Animated Foreground Grass & Foliage
+            ctx.strokeStyle = '#4ade80';
+            ctx.lineWidth = 3.5;
+            for (let x = 0; x < w; x += 18) {
+                const sway = Math.sin(animTime * 2.5 + x) * 5;
+                ctx.beginPath();
+                ctx.moveTo(x, h * 0.82);
+                ctx.quadraticCurveTo(x + sway, h * 0.74, x + sway * 1.6, h * 0.72);
+                ctx.stroke();
+            }
+        }
+
+        /* SCENARIOS DRAWING HELPERS */
+        function drawAdventurer(x, y) {
+            ctx.save();
+            ctx.translate(x, y);
+
+            // Running oscillation
+            const runOffset = Math.sin(animTime * 8) * 4;
+            ctx.translate(0, runOffset);
+
+            // Hair/Head
+            ctx.fillStyle = '#1c1917';
+            ctx.beginPath();
+            ctx.arc(0, -38, 12, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Face (Expressive look from screenshot)
+            ctx.fillStyle = '#fde047';
+            ctx.beginPath();
+            ctx.arc(2, -36, 9.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Beard
+            ctx.fillStyle = '#1c1917';
+            ctx.fillRect(4, -34, 7, 8);
+
+            // Eyes & Eyebrows
+            ctx.fillStyle = '#000000';
+            ctx.fillRect(5, -39, 2.5, 2.5);
+            ctx.fillRect(9, -39, 2.5, 2.5);
+
+            // Blue Shirt over White Undershirt (Matching user's image reference)
+            ctx.fillStyle = '#e2e8f0'; // White inner shirt
+            ctx.fillRect(-6, -26, 12, 22);
+
+            ctx.fillStyle = '#2563eb'; // Bright Blue Outer Shirt
+            ctx.fillRect(-10, -26, 6, 22);
+            ctx.fillRect(4, -26, 6, 22);
+
+            // Arms (Running gesture)
+            ctx.strokeStyle = '#2563eb';
+            ctx.lineWidth = 5;
+            ctx.beginPath();
+            ctx.moveTo(-6, -20);
+            ctx.lineTo(-14, -10 + Math.sin(animTime * 8) * 8);
+            ctx.moveTo(6, -20);
+            ctx.lineTo(14, -10 - Math.sin(animTime * 8) * 8);
+            ctx.stroke();
+
+            // Brown Trousers (Matching user image)
+            const legMove = Math.sin(animTime * 8) * 10;
+            ctx.strokeStyle = '#78350f';
+            ctx.lineWidth = 6;
+            ctx.beginPath();
+            ctx.moveTo(-4, -4);
+            ctx.lineTo(-4 + legMove, 18);
+            ctx.moveTo(4, -4);
+            ctx.lineTo(4 - legMove, 18);
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        function drawWoodenSign(x, y, text) {
+            ctx.save();
+            ctx.fillStyle = '#78350f';
+            ctx.fillRect(x - 5, y, 10, 55);
+
+            ctx.fillStyle = '#92400e';
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 2.5;
+            ctx.fillRect(x - 45, y - 35, 90, 35);
+            ctx.strokeRect(x - 45, y - 35, 90, 35);
+
+            // Prohibition Symbol
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 3.5;
+            ctx.beginPath();
+            ctx.arc(x, y - 18, 11, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x - 8, y - 25);
+            ctx.lineTo(x + 8, y - 11);
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        function drawSmokePuffs(x, y) {
+            ctx.fillStyle = 'rgba(240, 240, 240, 0.6)';
+            for (let i = 0; i < 3; i++) {
+                const offY = ((animTime * 25 + i * 18) % 45);
+                const offX = Math.sin(animTime + i) * 8;
+                ctx.beginPath();
+                ctx.arc(x + offX, y - offY, 6 + i * 2.5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function drawLake(w, h, hasCrocs) {
+            ctx.save();
+            const waterGrad = ctx.createLinearGradient(w * 0.45, 0, w, 0);
+            waterGrad.addColorStop(0, '#0284c7');
+            waterGrad.addColorStop(1, '#0369a1');
+            ctx.fillStyle = waterGrad;
+            ctx.beginPath();
+            ctx.ellipse(w * 0.72, h * 0.78, w * 0.28, h * 0.16, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Water Ripples
+            ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+            ctx.lineWidth = 2;
+            const waveX = (animTime * 25) % (w * 0.2);
+            ctx.beginPath();
+            ctx.arc(w * 0.6 + waveX, h * 0.78, 22, 0, Math.PI);
+            ctx.stroke();
+
+            if (hasCrocs) {
+                // Crocodile Jaws in water
+                ctx.fillStyle = '#15803d';
+                const crocX = w * 0.68 + Math.sin(animTime * 2) * 12;
+                const crocY = h * 0.76;
+                ctx.beginPath();
+                ctx.arc(crocX, crocY, 7, 0, Math.PI * 2);
+                ctx.arc(crocX + 12, crocY, 7, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Eyes
+                ctx.fillStyle = '#facc15';
+                ctx.fillRect(crocX - 2, crocY - 3, 3.5, 3.5);
+                ctx.fillRect(crocX + 10, crocY - 3, 3.5, 3.5);
+            }
+
+            ctx.restore();
+        }
+
+        function drawHangingVine(x, h) {
+            ctx.save();
+            ctx.strokeStyle = '#15803d';
+            ctx.lineWidth = 6;
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            const swing = Math.sin(animTime * 1.8) * 30;
+            ctx.quadraticCurveTo(x + swing, h * 0.35, x + swing * 0.8, h * 0.68);
+            ctx.stroke();
+
+            // Vine leaf
+            ctx.fillStyle = '#4ade80';
+            ctx.beginPath();
+            ctx.arc(x + swing * 0.8, h * 0.68, 9, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+
+        function drawGunshotFlash(w, h) {
+            const flash = Math.floor(animTime * 7) % 3 === 0;
+            if (flash) {
+                ctx.fillStyle = 'rgba(239, 68, 68, 0.3)';
+                ctx.fillRect(0, 0, w, h);
+            }
+
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 3;
+            const r = (animTime * 70) % 90;
+            ctx.beginPath();
+            ctx.arc(w * 0.82, h * 0.32, r, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+
+        /* Native Tribe Scene directly inspired by photo reference */
+        function drawNativeTribe(w, h) {
+            ctx.save();
+
+            // Native Tribal Warriors with feathers & spears
+            for (let i = 0; i < 3; i++) {
+                const tribeX = w * 0.58 + i * 38;
+                const tribeY = h * 0.62 + Math.sin(animTime * 6 + i) * 3;
+
+                // Skin
+                ctx.fillStyle = '#d97706';
+                ctx.beginPath();
+                ctx.arc(tribeX, tribeY - 32, 8, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Feather Headband (Inspired by image)
+                ctx.fillStyle = '#facc15';
+                ctx.fillRect(tribeX - 8, tribeY - 38, 16, 4);
+                ctx.fillStyle = '#ef4444';
+                ctx.beginPath();
+                ctx.arc(tribeX, tribeY - 44, 4, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Body
+                ctx.fillStyle = '#b45309';
+                ctx.fillRect(tribeX - 6, tribeY - 24, 12, 18);
+
+                // Spear in hand
+                ctx.strokeStyle = '#78350f';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(tribeX + 6, tribeY - 30);
+                ctx.lineTo(tribeX + 22, tribeY - 5);
+                ctx.stroke();
+            }
+
+            // Flying Spears in air (Matching reference photo)
+            const spearX = ((animTime * 180) % (w * 0.7)) + w * 0.2;
+            ctx.strokeStyle = '#78350f';
+            ctx.lineWidth = 4;
+            ctx.beginPath();
+            ctx.moveTo(spearX, h * 0.25);
+            ctx.lineTo(spearX - 40, h * 0.28);
+            ctx.stroke();
+
+            // Spear tip
+            ctx.fillStyle = '#94a3b8';
+            ctx.beginPath();
+            ctx.moveTo(spearX, h * 0.25);
+            ctx.lineTo(spearX - 8, h * 0.23);
+            ctx.lineTo(spearX - 8, h * 0.27);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        function drawGlowingMap(x, y) {
+            ctx.save();
+            const glowR = 16 + Math.sin(animTime * 4) * 6;
+            ctx.fillStyle = 'rgba(250, 204, 21, 0.45)';
+            ctx.beginPath();
+            ctx.arc(x, y, glowR + 12, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#fef08a';
+            ctx.strokeStyle = '#b45309';
+            ctx.lineWidth = 2.5;
+            ctx.fillRect(x - 18, y - 12, 36, 24);
+            ctx.strokeRect(x - 18, y - 12, 36, 24);
+
+            // Red X on map
+            ctx.strokeStyle = '#dc2626';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(x - 5, y - 5);
+            ctx.lineTo(x + 5, y + 5);
+            ctx.moveTo(x + 5, y - 5);
+            ctx.lineTo(x - 5, y + 5);
+            ctx.stroke();
+
+            ctx.restore();
+        }
+
+        function drawBackpack(x, y) {
+            ctx.save();
+            ctx.fillStyle = '#78350f';
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 2;
+            ctx.fillRect(x, y, 26, 32);
+            ctx.strokeRect(x, y, 26, 32);
+
+            // Books dropped next to it
+            ctx.fillStyle = '#dc2626';
+            ctx.fillRect(x + 30, y + 14, 20, 7);
+            ctx.fillStyle = '#2563eb';
+            ctx.fillRect(x + 28, y + 21, 22, 7);
+            ctx.restore();
+        }
+
+        function drawCarSoundwaves(w, h) {
+            ctx.save();
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 3.5;
+            for (let i = 1; i <= 3; i++) {
+                const rad = ((animTime * 45 + i * 22) % 80);
+                ctx.beginPath();
+                ctx.arc(w * 0.85, h * 0.35, rad, Math.PI * 0.7, Math.PI * 1.3);
+                ctx.stroke();
+            }
+            ctx.restore();
+        }
+
+        function drawEscapeGate(w, h) {
+            ctx.save();
+            const lightGrad = ctx.createRadialGradient(w * 0.82, h * 0.5, 5, w * 0.82, h * 0.5, 110);
+            lightGrad.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+            lightGrad.addColorStop(0.5, 'rgba(250, 204, 21, 0.7)');
+            lightGrad.addColorStop(1, 'transparent');
+            ctx.fillStyle = lightGrad;
+            ctx.beginPath();
+            ctx.arc(w * 0.82, h * 0.5, 110, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+
+        window.onload = function() {
+            // Ready to play!
+        };
+    </script>
+</body>
+</html>
